@@ -1,0 +1,28 @@
+{
+  "features": [
+    "new_device",
+    "impossible_travel",
+    "sim_swap",
+    "odd_hour",
+    "recovery_attempts",
+    "behavioral_mismatch",
+    "ip_bad",
+    "ip_vpn",
+    "device_age_days",
+    "failed_auth_24h",
+    "amount_zscore"
+  ],
+  "labels": {
+    "new_device": "New / unrecognised device",
+    "impossible_travel": "Impossible geo-velocity",
+    "sim_swap": "SIM-swap detected",
+    "odd_hour": "Odd-hour access",
+    "recovery_attempts": "Rapid recovery attempts",
+    "behavioral_mismatch": "Behavioural biometric mismatch",
+    "ip_bad": "Known-bad network",
+    "ip_vpn": "VPN / proxy network",
+    "device_age_days": "Unfamiliar / young device",
+    "failed_auth_24h": "Recent failed auth attempts",
+    "amount_zscore": "Anomalous transaction value"
+  }
+}

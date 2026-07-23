@@ -1,0 +1,9 @@
+fastapi==0.118.0
+uvicorn[standard]
+lightgbm
+shap
+networkx
+scikit-learn
+pandas
+numpy
+joblib

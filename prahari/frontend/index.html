@@ -1,0 +1,146 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PRAHARI — Continuous Identity Trust Console</title>
+<!-- <link rel="stylesheet" href="/styles.css"/> -->
+ <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">प्र</div>
+    <div class="brand">
+      <h1>PRAHARI</h1>
+      <div class="sub">Continuous Identity-Trust Console</div>
+    </div>
+    <div class="right">
+      <span class="live"><span class="dot"></span> SESSION LIVE</span>
+      <span class="pill" id="userpill">—</span>
+      <span class="pill">Session <b id="sid">—</b></span>
+    </div>
+  </header>
+
+  <div class="metrics" id="metrics">
+    <div class="metric"><div class="v" id="m_ctq">—</div><div class="l">Current CTQ</div></div>
+    <div class="metric"><div class="v" id="m_silent">—</div><div class="l">Frictionless access</div></div>
+    <div class="metric"><div class="v" id="m_step">—</div><div class="l">Step-ups triggered</div></div>
+    <div class="metric"><div class="v" id="m_block">—</div><div class="l">High-risk blocked</div></div>
+    <div class="metric"><div class="v" id="m_events">—</div><div class="l">Trust evaluations</div></div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT -->
+    <section class="card">
+      <h2>Risk Signals</h2>
+      <p class="hint">Load a scenario or flip live signals. Every change is scored by the LightGBM trust model on the backend.</p>
+
+      <button class="preset" data-preset="genuine"><span class="ic" style="background:var(--green)"></span><div>Genuine returning user<small>known device · clean network · normal behaviour</small></div></button>
+      <button class="preset" data-preset="ato"><span class="ic" style="background:var(--red)"></span><div>Account takeover attempt<small>new device · impossible travel · behaviour mismatch</small></div></button>
+      <button class="preset" data-preset="recovery"><span class="ic" style="background:var(--warn)"></span><div>Suspicious account recovery<small>SIM swap · repeated recovery · bad IP</small></div></button>
+      <button class="preset" data-preset="insider"><span class="ic" style="background:var(--amber)"></span><div>Insider / privileged misuse<small>odd hour · subtle behaviour drift</small></div></button>
+
+      <div style="border-top:1px solid var(--line);margin:14px 0 4px"></div>
+
+      <div class="sig"><div class="row"><div><div class="lbl">New / unrecognised device</div><div class="desc">No prior trust binding for this device</div></div>
+        <label class="sw"><input type="checkbox" id="s_dev"><span class="tr"></span><span class="kn"></span></label></div></div>
+      <div class="sig"><div class="row"><div><div class="lbl">Impossible geo-velocity</div><div class="desc">Location jump faster than physically possible</div></div>
+        <label class="sw"><input type="checkbox" id="s_geo"><span class="tr"></span><span class="kn"></span></label></div></div>
+      <div class="sig"><div class="row"><div><div class="lbl">SIM-swap detected</div><div class="desc">Recent SIM/eSIM change on linked number</div></div>
+        <label class="sw"><input type="checkbox" id="s_sim"><span class="tr"></span><span class="kn"></span></label></div></div>
+      <div class="sig"><div class="row"><div><div class="lbl">Odd-hour access</div><div class="desc">Outside the user's learned active window</div></div>
+        <label class="sw"><input type="checkbox" id="s_hour"><span class="tr"></span><span class="kn"></span></label></div></div>
+      <div class="sig">
+        <div class="lbl">Recovery attempts <span class="vtag" id="rec_v">0</span></div>
+        <div class="desc">Credential-reset tries in the current window</div>
+        <input type="range" min="0" max="4" value="0" class="slider" id="s_rec">
+      </div>
+      <div class="sig">
+        <div class="lbl">Behavioural mismatch <span class="vtag" id="bio_v">5%</span></div>
+        <div class="desc">On-device keystroke / touch / navigation score</div>
+        <input type="range" min="0" max="100" value="5" class="slider" id="s_bio">
+      </div>
+      <div class="sig">
+        <div class="lbl">Transaction anomaly <span class="vtag" id="amt_v">0.0σ</span></div>
+        <div class="desc">Value vs the user's spending baseline</div>
+        <input type="range" min="0" max="50" value="0" class="slider" id="s_amt">
+      </div>
+      <div class="sig">
+        <div class="lbl">Network reputation</div>
+        <div class="seg" id="s_ip">
+          <button data-v="clean" class="on">Clean</button>
+          <button data-v="vpn">VPN / proxy</button>
+          <button data-v="bad">Known-bad</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CENTER -->
+    <section class="card gaugewrap">
+      <h2 style="align-self:flex-start">Continuous Trust Quotient</h2>
+      <p class="hint" style="align-self:flex-start">Scored continuously, decays with inactivity, re-earned through behaviour — never granted once at login.</p>
+      <div class="gauge">
+        <svg viewBox="0 0 300 185" width="100%">
+          <path d="M30 150 A120 120 0 0 1 39.6 102.5" fill="none" stroke="#DC4B3E" stroke-width="17" stroke-linecap="round"/>
+          <path d="M44 94 A120 120 0 0 1 109 39.5" fill="none" stroke="#E0922B" stroke-width="17"/>
+          <path d="M120 35 A120 120 0 0 1 270 150" fill="none" stroke="#16A36A" stroke-width="17" stroke-linecap="round"/>
+          <g class="needle" id="needle">
+            <line x1="150" y1="150" x2="150" y2="56" stroke="#16243B" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="150" cy="150" r="9" fill="#16243B"/><circle cx="150" cy="150" r="4" fill="#fff"/>
+          </g>
+          <text x="30" y="179" fill="#90A0B6" font-size="10" text-anchor="middle">0</text>
+          <text x="270" y="179" fill="#90A0B6" font-size="10" text-anchor="middle">100</text>
+        </svg>
+        <div style="margin-top:-6px">
+          <div class="ctq-num" id="ctq">—</div>
+          <div class="ctq-band" id="band">—</div>
+          <div class="ctq-cap">probability the session identity is genuine</div>
+          <div class="mlrow" id="mlrow"></div>
+        </div>
+      </div>
+      <div class="decay"><span>Trust decay</span><span class="decaybar"><i id="decaybar"></i></span><span id="decaytxt">fresh</span></div>
+
+      <div class="actions">
+        <h3>Evaluate an action</h3>
+        <div class="actrow" id="actrow"></div>
+        <div class="verdict v-silent" id="verdict">
+          <div class="vic" id="vic">✓</div>
+          <div><div class="vt" id="vt">—</div><div class="vd" id="vd">—</div>
+          <div class="policy" id="policy"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT -->
+    <section class="card">
+      <h2>Reason Codes</h2>
+      <p class="hint">SHAP attribution from the model — why trust moved. Every decision is auditable for DPDP / RBI review.</p>
+      <div id="reasons"><div class="empty">No active risk signals.</div></div>
+
+      <div style="border-top:1px solid var(--line);margin:16px 0 14px"></div>
+      <div class="graphhead"><h2 style="margin:0">Identity Trust Graph</h2><button class="scanbtn" id="scan">Run scan</button></div>
+      <p class="hint" style="margin-bottom:8px">GNN-style scan over identities ↔ devices ↔ payees. A compromised session is pulled into any detected ring.</p>
+      <svg viewBox="0 0 320 170" width="100%" id="graphsvg"></svg>
+      <div class="gverdict gv-clean" id="gverdict">Not yet scanned for this session.</div>
+    </section>
+  </div>
+
+  <section class="card logcard">
+    <h2>Live Trust Event Stream</h2>
+    <p class="hint">Append-only audit trail persisted in the backend — the CTQ and orchestration decision at every evaluation.</p>
+    <div class="log"><table id="logtable"><thead><tr><th>Time</th><th>CTQ</th><th>Action</th><th>Decision</th><th>Top driver</th></tr></thead><tbody id="logbody"></tbody></table></div>
+  </section>
+
+  <footer>
+    PRAHARI — Privacy-preserving, Risk-Adaptive Hierarchical Authentication &amp; Real-time Identity-trust ·
+    backend: FastAPI + LightGBM + SHAP + SQLite + networkx ·
+    <span class="kbd">CTQ = min( P(genuine)×100 , policy ceilings )</span><br>
+    Bank of Baroda Hackathon 2026 · Identity Trust, Protection &amp; Safety
+  </footer>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
